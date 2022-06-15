@@ -814,7 +814,6 @@ int main( int argc, char *argv[] ){
     SDL_Renderer *renderer;
     int width = 800;
     int height = 600;
-    //if (screen_init(800, 600, title)) return -1;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s", SDL_GetError());
@@ -826,8 +825,7 @@ int main( int argc, char *argv[] ){
     }
     SDL_Surface *window_surf = SDL_GetWindowSurface( window );
     Uint32 *window_pix = (Uint32*) window_surf->pixels;
-    //TCHAR *title = _T("Mini3d (software render tutorial) - ")
-	//	_T("Left/Right: rotation, Up/Down: forward/backward, Space: switch state");
+
     SDL_SetWindowTitle( window, "Mini3d (software render tutorial) - Left/Right: rotation, Up/Down: forward/backward, Space: switch state" );
 
 	device_t device;
@@ -838,7 +836,7 @@ int main( int argc, char *argv[] ){
 	float pos = 3.5;
 
 
-	device_init(&device, 800, 600, window_surf->pixels);//screen_fb);
+	device_init(&device, 800, 600, window_surf->pixels);
 	camera_at_zero(&device, 3, 0, 0);
 
 	init_texture(&device);
@@ -873,7 +871,7 @@ int main( int argc, char *argv[] ){
                     break;
             }
         }
-		//screen_dispatch();
+
 		device_clear(&device, 1);
 		camera_at_zero(&device, pos, 0, 0);
 		
@@ -888,25 +886,24 @@ int main( int argc, char *argv[] ){
 				if (++indicator >= 3) indicator = 0;
 				device.render_state = states[indicator];
 			}
-		}	else {
+		}	
+		else {
 			kbhit = 0;
 		}
 
 		draw_box(&device, alpha);
 
-		//for (int j = 0; j < height; ++j ){
-		//	for (int i = 0; i < width; ++i ){
-		//		window_pix[ i + (j * width) ] = device.framebuffer[i][j];
-		//	}
-		//}
 
-		SDL_UpdateWindowSurface( window );//SDL_RenderPresent(renderer);//screen_update();
+		SDL_UpdateWindowSurface( window );
 
 		SDL_Delay( 1 );
 	}
 	exit:
 
 	device_destroy(&device);
+	SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
 	return 0;
 }
